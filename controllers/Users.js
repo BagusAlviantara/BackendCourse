@@ -13,6 +13,33 @@ exports.getUsers = async(req, res) => {
     }
 }
 
+exports.getUsersbyStudent = async(req, res) => {
+    try {
+        const response = await User.findAll({
+            attributes: ['id', 'full_name', 'phone', 'email', 'password', 'role'],
+            where: {
+                role: "Student"
+            }
+        });
+        res.status(200).json(response);
+    } catch (error) {
+        res.status(500).json({ msg: error.message });
+    }
+}
+
+exports.getUsersbyEmployee = async(req, res) => {
+    try {
+        const response = await User.findAll({
+            attributes: ['id', 'full_name', 'phone', 'email', 'password', 'role'],
+            where: {
+                role: "Employee"
+            }
+        });
+        res.status(200).json(response);
+    } catch (error) {
+        res.status(500).json({ msg: error.message });
+    }
+}
 exports.getUserById = async(req, res) => {
     try {
         const response = await User.findOne({
@@ -34,7 +61,7 @@ exports.createUser = async(req, res) => {
         }
     });
     if (user) {
-        return res.status(409).json({ message: "email already exists" });
+        return res.status(409).json({ msg: "email already exists" });
     }
     const { full_name, phone, email, password, confPassword, role } = req.body;
     if (password !== confPassword) return res.status(400).json({ msg: "Password dan Confirm Password tidak cocok" });
@@ -60,7 +87,7 @@ exports.registerStudent = async(req, res) => {
         }
     });
     if (user) {
-        return res.status(409).json({ message: "email already exists" });
+        return res.status(409).json({ msg: "email already exists" });
     }
     const { full_name, phone, email, password, confPassword, role } = req.body;
     if (password !== confPassword) return res.status(400).json({ msg: "Password dan Confirm Password tidak cocok" });
@@ -80,12 +107,16 @@ exports.registerStudent = async(req, res) => {
 }
 
 exports.updateUser = async(req, res) => {
+    //Check id user
     const user = await User.findOne({
         where: {
-            id: req.params.id
+            id: req.params.id,
         }
     });
-    if (!user) return res.status(404).json({ msg: "User tidak ditemukan" });
+    if (!user) {
+        return res.status(404).json({ msg: "User tidak ditemukan" });
+    }
+
     const { full_name, phone, email, password, confPassword, role } = req.body;
     let hashPassword;
     if (password === "" || password === null) {
@@ -174,4 +205,5 @@ exports.deleteUser = async(req, res) => {
 //         .catch(err => {
 //             console.log('error', err);
 //         });
+// };      });
 // };

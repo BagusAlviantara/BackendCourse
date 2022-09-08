@@ -1,7 +1,8 @@
 const { Sequelize } = require("sequelize");
 const db = require("../config/database.js");
 const Employee = require("./EmployeeModel.js");
-//const Products = require("./ProductModel.js");
+const Products = require("./ProductModel.js");
+const Student = require("./StudentModel.js");
 
 const { DataTypes } = Sequelize;
 
@@ -29,8 +30,8 @@ const ClassSchedule = db.define('class_schedule', {
             notEmpty: true
         }
     },
-    day: {
-        type: DataTypes.STRING,
+    date: {
+        type: DataTypes.DATE,
         allowNull: false,
         validate: {
             notEmpty: true
@@ -60,7 +61,7 @@ const ClassSchedule = db.define('class_schedule', {
 Employee.hasMany(ClassSchedule, { foreignKey: 'employee_id' });
 ClassSchedule.belongsTo(Employee, { foreignKey: 'employee_id' });
 
-// Products.hasMany(ClassSchedule, { foreignKey: 'product_id' });
-// ClassSchedule.belongsTo(Products, { foreignKey: 'product_id' });
+Products.hasMany(ClassSchedule, { foreignKey: 'product_id' });
+ClassSchedule.belongsTo(Products, { foreignKey: 'product_id' });
 
 module.exports = ClassSchedule;

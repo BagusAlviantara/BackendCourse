@@ -3,8 +3,8 @@ const Schedule = require("../models/ClassScheduleModel.js");
 
 exports.getSchedule = async(req, res) => {
     try {
-        const response = await Schedule.findOne({
-            attributes: ['id', 'employee_id', 'product_id', 'day', 'start_time', 'end_time']
+        const response = await Schedule.findAll({
+            attributes: ['id', 'employee_id', 'product_id', 'date', 'start_time', 'end_time']
         });
         res.status(200).json(response);
     } catch (error) {
@@ -15,7 +15,7 @@ exports.getSchedule = async(req, res) => {
 exports.getScheduleById = async(req, res) => {
     try {
         const response = await Schedule.findOne({
-            attributes: ['id', 'employee_id', 'product_id', 'day', 'start_time', 'end_time'],
+            attributes: ['id', 'employee_id', 'product_id', 'date', 'start_time', 'end_time'],
             where: {
                 id: req.params.id
             }
@@ -27,13 +27,13 @@ exports.getScheduleById = async(req, res) => {
 }
 
 exports.createSchedule = async(req, res) => {
-    const { id, employee_id, product_id, day, start_time, end_time } = req.body;
+    const { id, employee_id, product_id, date, start_time, end_time } = req.body;
     try {
         await Schedule.create({
             id: id,
             employee_id: employee_id,
             product_id: product_id,
-            day: day,
+            date: date,
             start_time: start_time,
             end_time: end_time
         });
@@ -50,13 +50,13 @@ exports.updateSchedule = async(req, res) => {
         }
     });
     if (!schedule) return res.status(404).json({ msg: "tidak ditemukan" });
-    const { id, employee_id, product_id, day, start_time, end_time } = req.body;
+    const { id, employee_id, product_id, date, start_time, end_time } = req.body;
     try {
         await Schedule.update({
             id: id,
             employee_id: employee_id,
             product_id: product_id,
-            day: day,
+            date: date,
             start_time: start_time,
             end_time: end_time
         }, {

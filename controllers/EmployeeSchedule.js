@@ -1,5 +1,4 @@
 const EmployeeSchedule = require("../models/EmployeeScheduleModel.js");
-//const Employee = require("../models/EmployeeModel.js");
 const { Op } = require("sequelize");
 
 exports.getEmployeeSchedule = async(req, res) => {
@@ -86,10 +85,11 @@ exports.getEmployeeScheduleByEmployeeSenin = async(req, res) => {
         });
         if (!employeeSchedule) return res.status(404).json({ msg: "Data tidak ditemukan" });
         let response;
-        if (req.day === "Senin") {
+        if (req.role === "Admin") {
             response = await EmployeeSchedule.findOne({
                 attributes: ['id', 'employee_id', 'day', 'start_time', 'end_time', 'start_break', 'end_break'],
                 where: {
+                    employee_id: employeeSchedule.employee_id,
                     day: "Senin"
                 }
             });
@@ -97,7 +97,7 @@ exports.getEmployeeScheduleByEmployeeSenin = async(req, res) => {
             response = await EmployeeSchedule.findOne({
                 attributes: ['id', 'employee_id', 'day', 'start_time', 'end_time', 'start_break', 'end_break'],
                 where: {
-                    [Op.and]: [{ employee_id: employeeSchedule.id }]
+                    [Op.and]: [{ employee_id: employeeSchedule.employee_id, day: employeeSchedule.day }]
                 }
             });
         }
@@ -116,10 +116,11 @@ exports.getEmployeeScheduleByEmployeeSelasa = async(req, res) => {
         });
         if (!employeeSchedule) return res.status(404).json({ msg: "Data tidak ditemukan" });
         let response;
-        if (req.day === "Selasa") {
+        if (req.role === "Admin") {
             response = await EmployeeSchedule.findOne({
                 attributes: ['id', 'employee_id', 'day', 'start_time', 'end_time', 'start_break', 'end_break'],
                 where: {
+                    employee_id: employeeSchedule.employee_id,
                     day: "Selasa"
                 }
             });
@@ -127,7 +128,7 @@ exports.getEmployeeScheduleByEmployeeSelasa = async(req, res) => {
             response = await EmployeeSchedule.findOne({
                 attributes: ['id', 'employee_id', 'day', 'start_time', 'end_time', 'start_break', 'end_break'],
                 where: {
-                    [Op.and]: [{ employee_id: employeeSchedule.id }]
+                    [Op.and]: [{ employee_id: employeeSchedule.employee_id, day: employeeSchedule.day }]
                 }
             });
         }
@@ -146,18 +147,19 @@ exports.getEmployeeScheduleByEmployeeRabu = async(req, res) => {
         });
         if (!employeeSchedule) return res.status(404).json({ msg: "Data tidak ditemukan" });
         let response;
-        if (req.day === "Rabu") {
+        if (req.role === "Admin") {
             response = await EmployeeSchedule.findOne({
                 attributes: ['id', 'employee_id', 'day', 'start_time', 'end_time', 'start_break', 'end_break'],
                 where: {
-                    employee_id: employeeSchedule.id
+                    employee_id: employeeSchedule.employee_id,
+                    day: "Rabu"
                 }
             });
         } else {
             response = await EmployeeSchedule.findOne({
                 attributes: ['id', 'employee_id', 'day', 'start_time', 'end_time', 'start_break', 'end_break'],
                 where: {
-                    [Op.and]: [{ employee_id: employeeSchedule.id }]
+                    [Op.and]: [{ employee_id: employeeSchedule.employee_id, day: employeeSchedule.day }]
                 }
             });
         }
@@ -176,18 +178,19 @@ exports.getEmployeeScheduleByEmployeeKamis = async(req, res) => {
         });
         if (!employeeSchedule) return res.status(404).json({ msg: "Data tidak ditemukan" });
         let response;
-        if (req.day === "Kamis") {
+        if (req.role === "Admin") {
             response = await EmployeeSchedule.findOne({
                 attributes: ['id', 'employee_id', 'day', 'start_time', 'end_time', 'start_break', 'end_break'],
                 where: {
-                    employee_id: employeeSchedule.id
+                    employee_id: employeeSchedule.employee_id,
+                    day: "Kamis"
                 }
             });
         } else {
             response = await EmployeeSchedule.findOne({
                 attributes: ['id', 'employee_id', 'day', 'start_time', 'end_time', 'start_break', 'end_break'],
                 where: {
-                    [Op.and]: [{ employee_id: employeeSchedule.id }]
+                    [Op.and]: [{ employee_id: employeeSchedule.employee_id, day: employeeSchedule.day }]
                 }
             });
         }
@@ -206,18 +209,19 @@ exports.getEmployeeScheduleByEmployeeJumat = async(req, res) => {
         });
         if (!employeeSchedule) return res.status(404).json({ msg: "Data tidak ditemukan" });
         let response;
-        if (req.day === "Jumat") {
+        if (req.role === "Admin") {
             response = await EmployeeSchedule.findOne({
                 attributes: ['id', 'employee_id', 'day', 'start_time', 'end_time', 'start_break', 'end_break'],
                 where: {
-                    employee_id: employeeSchedule.id
+                    employee_id: employeeSchedule.employee_id,
+                    day: "Jumat"
                 }
             });
         } else {
             response = await EmployeeSchedule.findOne({
                 attributes: ['id', 'employee_id', 'day', 'start_time', 'end_time', 'start_break', 'end_break'],
                 where: {
-                    [Op.and]: [{ employee_id: employeeSchedule.id }]
+                    [Op.and]: [{ employee_id: employeeSchedule.employee_id, day: employeeSchedule.day }]
                 }
             });
         }
@@ -236,18 +240,19 @@ exports.getEmployeeScheduleByEmployeeSabtu = async(req, res) => {
         });
         if (!employeeSchedule) return res.status(404).json({ msg: "Data tidak ditemukan" });
         let response;
-        if (req.day === "Sabtu") {
+        if (req.role === "Admin") {
             response = await EmployeeSchedule.findOne({
                 attributes: ['id', 'employee_id', 'day', 'start_time', 'end_time', 'start_break', 'end_break'],
                 where: {
-                    employee_id: employeeSchedule.id
+                    employee_id: employeeSchedule.employee_id,
+                    day: "Sabtu"
                 }
             });
         } else {
             response = await EmployeeSchedule.findOne({
                 attributes: ['id', 'employee_id', 'day', 'start_time', 'end_time', 'start_break', 'end_break'],
                 where: {
-                    [Op.and]: [{ employee_id: employeeSchedule.id }]
+                    [Op.and]: [{ employee_id: employeeSchedule.employee_id, day: employeeSchedule.day }]
                 }
             });
         }
@@ -266,18 +271,19 @@ exports.getEmployeeScheduleByEmployeeMinggu = async(req, res) => {
         });
         if (!employeeSchedule) return res.status(404).json({ msg: "Data tidak ditemukan" });
         let response;
-        if (req.day === "Minggu") {
+        if (req.role === "Admin") {
             response = await EmployeeSchedule.findOne({
                 attributes: ['id', 'employee_id', 'day', 'start_time', 'end_time', 'start_break', 'end_break'],
                 where: {
-                    employee_id: employeeSchedule.id
+                    employee_id: employeeSchedule.employee_id,
+                    day: "Minggu"
                 }
             });
         } else {
             response = await EmployeeSchedule.findOne({
                 attributes: ['id', 'employee_id', 'day', 'start_time', 'end_time', 'start_break', 'end_break'],
                 where: {
-                    [Op.and]: [{ employee_id: employeeSchedule.id }]
+                    [Op.and]: [{ employee_id: employeeSchedule.employee_id, day: employeeSchedule.day }]
                 }
             });
         }
@@ -348,78 +354,3 @@ exports.deleteEmployeeSchedule = async(req, res) => {
         res.status(500).json({ msg: error.message });
     }
 }
-
-
-
-// exports.createEmployeeSchedule = async(req, res) => {
-//     const { id, employee_id, day, start_time, end_time, start_break, end_break } = req.body;
-//     try {
-//         res.json([{
-//                 id: id,
-//                 employee_id: employee_id,
-//                 day: "Senin",
-//                 start_time: start_time,
-//                 end_time: end_time,
-//                 start_break: start_break,
-//                 end_break: end_break
-//             },
-//             {
-//                 id: id,
-//                 employee_id: employee_id,
-//                 day: "Selasa",
-//                 start_time: start_time,
-//                 end_time: end_time,
-//                 start_break: start_break,
-//                 end_break: end_break
-//             },
-//             {
-//                 id: id,
-//                 employee_id: employee_id,
-//                 day: "Rabu",
-//                 start_time: start_time,
-//                 end_time: end_time,
-//                 start_break: start_break,
-//                 end_break: end_break
-//             },
-//             {
-//                 id: id,
-//                 employee_id: employee_id,
-//                 day: "Kamis",
-//                 start_time: start_time,
-//                 end_time: end_time,
-//                 start_break: start_break,
-//                 end_break: end_break
-//             },
-//             {
-//                 id: id,
-//                 employee_id: employee_id,
-//                 day: "Jumat",
-//                 start_time: start_time,
-//                 end_time: end_time,
-//                 start_break: start_break,
-//                 end_break: end_break
-//             },
-//             {
-//                 id: id,
-//                 employee_id: employee_id,
-//                 day: "Sabtu",
-//                 start_time: start_time,
-//                 end_time: end_time,
-//                 start_break: start_break,
-//                 end_break: end_break
-//             },
-//             {
-//                 id: id,
-//                 employee_id: employee_id,
-//                 day: "Minggu",
-//                 start_time: start_time,
-//                 end_time: end_time,
-//                 start_break: start_break,
-//                 end_break: end_break
-//             }
-//         ]);
-//         res.status(201).json({ msg: "EmployeeSchedule Created Successfuly" });
-//     } catch (error) {
-//         res.status(500).json({ msg: error.message });
-//     }
-// }

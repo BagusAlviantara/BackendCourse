@@ -1,5 +1,6 @@
 const { Sequelize } = require("sequelize");
 const db = require("../config/database.js");
+const ClassSchedule = require("./ClassScheduleModel.js");
 const User = require("./UserModel.js");
 
 const { DataTypes } = Sequelize;

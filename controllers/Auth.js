@@ -33,15 +33,21 @@ exports.LoginStudent = async(req, res) => {
         return res.status(400).json({ msg: "Wrong Password" });
     }
     try {
+        req.session.userId = user.id;
         if (user.role === "Student") {
-            req.session.userId = user.id;
+            const id = user.id;
+            const email = user.email;
+            const role = user.role;
+            const token = jwt.sign({ email: req.body.email }, 'secret', { expiresIn: '1h' });
+            res.status(200).json({ id, email, role, "token": token });
+        } else if (user.role === "Employee") {
             const id = user.id;
             const email = user.email;
             const role = user.role;
             const token = jwt.sign({ email: req.body.email }, 'secret', { expiresIn: '1h' });
             res.status(200).json({ id, email, role, "token": token });
         } else {
-            return res.status(401).json({ msg: "Mohon login menggunakan akun siswa!" });
+            return res.status(401).json({ msg: "Mohon login menggunakan akun anda!" });
         }
     } catch (error) {
         res.status(500).json({ msg: error.message });
@@ -65,6 +71,13 @@ exports.Me = async(req, res) => {
 
 exports.Logout = (req, res) => {
     req.session.destroy((err) => {
+        if (err) return res.status(400).json({ msg: "Tidak dapat logout" });
+        res.status(200).json({ msg: "Anda telah logout" });
+    });
+}
+
+exports.LogoutStudent = (req, res) => {
+    jwt.destroy(token, (err) => {
         if (err) return res.status(400).json({ msg: "Tidak dapat logout" });
         res.status(200).json({ msg: "Anda telah logout" });
     });

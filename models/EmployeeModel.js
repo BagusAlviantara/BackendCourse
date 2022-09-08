@@ -17,6 +17,7 @@ const Employee = db.define('employee', {
     user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        uniue: true,
         validate: {
             notEmpty: true,
         }
@@ -49,8 +50,8 @@ const Employee = db.define('employee', {
             notEmpty: true
         }
     },
-    department: {
-        type: DataTypes.STRING,
+    department_id: {
+        type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
             notEmpty: true

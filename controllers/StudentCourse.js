@@ -8,6 +8,10 @@ exports.getStudentCourse = async(req, res) => {
             response = await StudentCourse.findAll({
                 attributes: ['id', 'schedule_id', 'student_id']
             });
+        } else {
+            response = await StudentCourse.findAll({
+                attributes: ['id', 'schedule_id', 'student_id']
+            });
         }
         res.status(200).json(response);
     } catch (error) {

@@ -8,6 +8,10 @@ exports.getUnits = async(req, res) => {
             response = await Units.findAll({
                 attributes: ['id', 'product_id', 'code_unit', 'name', 'order_unit']
             });
+        } else {
+            response = await Units.findAll({
+                attributes: ['id', 'product_id', 'code_unit', 'name', 'order_unit']
+            });
         }
         res.status(200).json(response);
     } catch (error) {

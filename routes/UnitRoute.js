@@ -11,9 +11,9 @@ const { verifyUser, adminOnly } = require("../middleware/AuthUser.js");
 
 const router = express.Router();
 
-router.get('/product-units', verifyUser, adminOnly, getUnits);
-router.get('/product-units/:id', verifyUser, adminOnly, getUnitsById);
-router.get('/product-unitsbyproductid/:id', verifyUser, adminOnly, getUnitsByIdProduct);
+router.get('/product-units', verifyUser, getUnits);
+router.get('/product-units/:id', verifyUser, getUnitsById);
+router.get('/product-unitsbyproductid/:id', verifyUser, getUnitsByIdProduct);
 router.post('/product-units', verifyUser, adminOnly, createUnits);
 router.patch('/product-units/:id', verifyUser, adminOnly, updateUnits);
 router.delete('/product-units/:id', verifyUser, adminOnly, deleteUnits);

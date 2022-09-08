@@ -1,15 +1,20 @@
 const Employee = require("../models/EmployeeModel.js");
-const Schedule = require("../models/ClassScheduleModel.js");
+// const Schedule = require("../models/ClassScheduleModel.js");
 const { Op } = require("sequelize");
-const StudentCourse = require("../models/StudentCourseModel.js");
+// const StudentCourse = require("../models/StudentCourseModel.js");
 
 exports.getEmployee = async(req, res) => {
     try {
         let response;
         if (req.role === "Admin") {
             response = await Employee.findAll({
-                attributes: ['id', 'user_id', 'name_employee', 'address', 'gender', 'phone', 'department']
+                attributes: ['id', 'user_id', 'name_employee', 'address', 'gender', 'phone', 'department_id']
             });
+        } else if (req.role = "Employee") {
+            response = await Employee.findAll({
+                attributes: ['id', 'user_id', 'name_employee', 'address', 'gender', 'phone', 'department_id']
+            });
+            z
         }
         res.status(200).json(response);
     } catch (error) {
@@ -28,14 +33,14 @@ exports.getEmployeeById = async(req, res) => {
         let response;
         if (req.role === "Admin") {
             response = await Employee.findOne({
-                attributes: ['id', 'user_id', 'name_employee', 'address', 'gender', 'phone', 'department'],
+                attributes: ['id', 'user_id', 'name_employee', 'address', 'gender', 'phone', 'department_id'],
                 where: {
                     id: employee.id
                 }
             });
         } else {
             response = await Employee.findOne({
-                attributes: ['id', 'user_id', 'name_employee', 'address', 'gender', 'phone', 'department'],
+                attributes: ['id', 'user_id', 'name_employee', 'address', 'gender', 'phone', 'department_id'],
                 where: {
                     [Op.and]: [{ id: employee.id }]
                 }
@@ -48,7 +53,15 @@ exports.getEmployeeById = async(req, res) => {
 }
 
 exports.createEmployee = async(req, res) => {
-    const { id, user_id, name_employee, address, gender, phone, department } = req.body;
+    const employee = await Employee.findOne({
+        where: {
+            user_id: req.body.user_id,
+        }
+    });
+    if (employee) {
+        return res.status(409).json({ msg: "User ID already exists, Input different User ID" });
+    }
+    const { id, user_id, name_employee, address, gender, phone, department_id } = req.body;
     try {
         await Employee.create({
             id: id,
@@ -57,7 +70,7 @@ exports.createEmployee = async(req, res) => {
             address: address,
             gender: gender,
             phone: phone,
-            department: department,
+            department_id: department_id,
         });
         res.status(201).json({ msg: "Employee Created Successfuly" });
     } catch (error) {
@@ -73,9 +86,9 @@ exports.updateEmployee = async(req, res) => {
             }
         });
         if (!employee) return res.status(404).json({ msg: "Data tidak ditemukan" });
-        const { id, user_id, name_employee, address, gender, phone, department } = req.body;
+        const { id, user_id, name_employee, address, gender, phone, department_id } = req.body;
         if (req.role === "Admin") {
-            await Employee.update({ id, user_id, name_employee, address, gender, phone, department }, {
+            await Employee.update({ id, user_id, name_employee, address, gender, phone, department_id }, {
                 where: {
                     id: employee.id
                 }
@@ -95,7 +108,7 @@ exports.deleteEmployee = async(req, res) => {
             }
         });
         if (!employee) return res.status(404).json({ msg: "Data tidak ditemukan" });
-        const { user_id, name_employee, address, gender, phone, department } = req.body;
+        const { user_id, name_employee, address, gender, phone, department_id } = req.body;
         if (req.role === "Admin") {
             await Employee.destroy({
                 where: {
@@ -120,7 +133,7 @@ exports.getEmployeeJoinClass = async(req, res) => {
         let response;
         if (req.role === "Admin") {
             response = await Employee.findAll({
-                attributes: ['id', 'user_id', 'name_employee', 'address', 'gender', 'phone', 'department']
+                attributes: ['id', 'user_id', 'name_employee', 'address', 'gender', 'phone', 'department_id']
             });
         }
         res.status(200).json(response);
