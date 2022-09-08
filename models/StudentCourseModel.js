@@ -46,5 +46,10 @@ const StudentCourse = db.define('student_course', {
     updatedAt: 'updated_at'
 });
 
+Student.hasMany(StudentCourse, { foreignKey: 'id' });
+StudentCourse.belongsTo(Student, { foreignKey: 'id' });
+
+StudentCourse.hasOne(ClassSchedule, { foreignKey: 'id' });
+ClassSchedule.belongsTo(StudentCourse, { foreignKey: 'id' });
 
 module.exports = StudentCourse;

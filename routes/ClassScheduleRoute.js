@@ -2,6 +2,7 @@ const express = require("express");
 const {
     getSchedule,
     getScheduleById,
+    getScheduleStudentCourse,
     createSchedule,
     updateSchedule,
     deleteSchedule

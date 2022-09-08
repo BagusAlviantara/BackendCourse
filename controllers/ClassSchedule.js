@@ -1,5 +1,5 @@
 const Schedule = require("../models/ClassScheduleModel.js");
-//const { Op } = require("sequelize");
+const { Op } = require("sequelize");
 
 exports.getSchedule = async(req, res) => {
     try {
@@ -11,6 +11,7 @@ exports.getSchedule = async(req, res) => {
         res.status(500).json({ msg: error.message });
     }
 }
+
 
 exports.getScheduleById = async(req, res) => {
     try {

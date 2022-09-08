@@ -27,6 +27,13 @@ const Reports = db.define('student_reports', {
             notEmpty: true
         }
     },
+    schedule_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+            notEmpty: true
+        }
+    },
     score: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -36,14 +43,21 @@ const Reports = db.define('student_reports', {
     },
     photo: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         validate: {
+            notEmpty: true
+        }
+    },
+    employee_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        valide: {
             notEmpty: true
         }
     },
     video: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         validate: {
             notEmpty: true
         }

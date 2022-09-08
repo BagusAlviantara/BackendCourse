@@ -1,7 +1,6 @@
 const { Sequelize } = require("sequelize");
 const db = require("../config/database.js");
 
-
 const { DataTypes } = Sequelize;
 
 const Department = db.define('department', {
@@ -17,6 +16,7 @@ const Department = db.define('department', {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
         validate: {
             notEmpty: true,
             len: [3, 25]

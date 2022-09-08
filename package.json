@@ -13,6 +13,7 @@
     "dependencies": {
         "accesscontrol": "^2.2.1",
         "argon2": "^0.28.7",
+        "babelrc": "^0.0.7",
         "body-parser": "^1.20.0",
         "connect-session-sequelize": "^7.1.4",
         "cors": "^2.8.5",
@@ -26,7 +27,8 @@
         "mysql2": "^2.3.3",
         "path": "^0.12.7",
         "sequelize": "^6.21.3",
-        "sequelize-fn": "^1.0.4"
+        "sequelize-fn": "^1.0.4",
+        "url": "^0.11.0"
     },
     "devDependencies": {
         "nodemon": "^2.0.19"

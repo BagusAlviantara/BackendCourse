@@ -1,5 +1,7 @@
 const StudentCourse = require("../models/StudentCourseModel.js");
+const Schedule = require("../models/ClassScheduleModel.js");
 const { Op } = require("sequelize");
+const sequelize = require("sequelize");
 
 exports.getStudentCourse = async(req, res) => {
     try {
@@ -14,6 +16,103 @@ exports.getStudentCourse = async(req, res) => {
             });
         }
         res.status(200).json(response);
+    } catch (error) {
+        res.status(500).json({ msg: error.message });
+    }
+}
+
+// exports.getScheduleStudentCourse = async(req, res) => {
+//     try {
+//         const response = await Schedule.findAll({
+//             attributes: ['id', 'employee_id', 'product_id', 'date', 'start_time', 'end_time'],
+//             include: [{
+//                 model: StudentCourse,
+//             }]
+//         });
+//         res.status(200).json(response);
+//     } catch (error) {
+//         res.status(500).json({ msg: error.message });
+//     }
+// }
+
+// exports.getScheduleStudentCourse = async(req, res) => {
+//     try {
+//         const response = await StudentCourse.findAll({
+//             attributes: ['id', 'schedule_id', 'student_id'],
+//             include: [{
+//                 model: Schedule
+//             }]
+//         });
+//         res.status(200).json(response);
+//     } catch (error) {
+//         res.status(500).json({ msg: error.message });
+//     }
+// }
+
+// exports.getScheduleStudentCourse = async(req, res) => {
+//     try {
+//         const response = await StudentCourse.findAll({
+//             attributes: ['schedule_id'],
+//             include: [{
+//                 model: Schedule
+//             }]
+//         });
+//         res.status(200).json(response);
+//     } catch (error) {
+//         res.status(500).json({ msg: error.message });
+//     }
+// }
+
+exports.getScheduleStudentCourse = async(req, res) => {
+    try {
+        if (req.role === "Admin") {
+            await StudentCourse.findAll({
+                attributes: [
+                    'schedule_id', [sequelize.fn('COUNT', sequelize.col('*')), 'Jumlah Student Course']
+                ],
+                where: {
+                    schedule_id: {
+                        [Op.in]: [Schedule.findAll({
+                            attributes: ['id'], //[[sequelize.fn('MONTH', sequelize.col('created_at')), 'Bulan']]
+                            // where: {
+                            //     '$month(class_schedule.created_at)$': {
+                            //         [Op.eq]: 9
+                            //     }
+                            // }
+                            // where: {
+                            //     created_at: {
+                            //         [Op.eq]: 9
+                            //     }
+                            // }
+                        })]
+                    }
+                },
+                group: 'schedule_id'
+            }).then(function(response) {
+                res.status(200).json(response);
+            });
+        } else {
+            await StudentCourse.findAll({
+                attributes: [
+                    'schedule_id', [sequelize.fn('COUNT', sequelize.col('*')), 'Jumlah Student Course']
+                ],
+                where: {
+                    schedule_id: {
+                        [Op.in]: [Schedule.findAll({
+                            attributes: ['id'], //
+                            // where: {
+                            //     created_at: {
+                            //         [Op.eq]: 9
+                            //     }
+                            // }
+                        })]
+                    }
+                },
+                group: 'schedule_id'
+            }).then(function(response) {
+                res.status(200).json(response);
+            });
+        }
     } catch (error) {
         res.status(500).json({ msg: error.message });
     }

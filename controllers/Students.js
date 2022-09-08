@@ -4,7 +4,7 @@ const Student = require("../models/StudentModel.js");
 exports.getStudent = async(req, res) => {
     try {
         const response = await Student.findAll({
-            attributes: ['id', 'user_id', 'name_student', 'phone_parent', 'address', 'gender', 'age']
+            attributes: ['id', 'user_id', 'name_student', 'phone', 'address', 'gender', 'age']
         });
         res.status(200).json(response);
     } catch (error) {
@@ -15,7 +15,7 @@ exports.getStudent = async(req, res) => {
 exports.getStudentById = async(req, res) => {
     try {
         const response = await Student.findOne({
-            attributes: ['id', 'user_id', 'name_student', 'phone_parent', 'address', 'gender', 'age'],
+            attributes: ['id', 'user_id', 'name_student', 'phone', 'address', 'gender', 'age'],
             where: {
                 id: req.params.id
             }
@@ -36,13 +36,13 @@ exports.createStudent = async(req, res) => {
     if (student) {
         return res.status(409).json({ msg: "User ID already exists, Input different User ID" });
     }
-    const { id, user_id, name_student, phone_parent, address, gender, age } = req.body;
+    const { id, user_id, name_student, phone, address, gender, age } = req.body;
     try {
         await Student.create({
             id: id,
             user_id: user_id,
             name_student: name_student,
-            phone_parent: phone_parent,
+            phone: phone,
             address: address,
             gender: gender,
             age: age,
@@ -61,8 +61,8 @@ exports.updateStudent = async(req, res) => {
             }
         });
         if (!student) return res.status(404).json({ msg: "Data tidak ditemukan" });
-        const { id, user_id, name_student, phone_parent, address, gender, age } = req.body;
-        await Student.update({ id, user_id, name_student, phone_parent, address, gender, age }, {
+        const { id, user_id, name_student, phone, address, gender, age } = req.body;
+        await Student.update({ id, user_id, name_student, phone, address, gender, age }, {
             where: {
                 id: student.id
             }

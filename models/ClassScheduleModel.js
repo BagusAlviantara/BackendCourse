@@ -58,10 +58,10 @@ const ClassSchedule = db.define('class_schedule', {
     updatedAt: 'updated_at'
 });
 
-Employee.hasMany(ClassSchedule, { foreignKey: 'employee_id' });
-ClassSchedule.belongsTo(Employee, { foreignKey: 'employee_id' });
+Employee.hasMany(ClassSchedule, { foreignKey: 'id' });
+ClassSchedule.belongsTo(Employee, { foreignKey: 'id' });
 
-Products.hasMany(ClassSchedule, { foreignKey: 'product_id' });
-ClassSchedule.belongsTo(Products, { foreignKey: 'product_id' });
+Products.hasMany(ClassSchedule, { foreignKey: 'id' });
+ClassSchedule.belongsTo(Products, { foreignKey: 'id' });
 
 module.exports = ClassSchedule;

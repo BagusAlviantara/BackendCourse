@@ -96,7 +96,7 @@ exports.deleteDepartment = async(req, res) => {
                 }
             });
         }
-        res.status(200).json({ msg: "Department deleted successfuly" });
+        res.status(200).json({ msg: "Product department deleted successfuly" });
     } catch (error) {
         res.status(500).json({ msg: error.message });
     }

@@ -59,14 +59,14 @@ exports.getEmployeeScheduleByEmployee = async(req, res) => {
             response = await EmployeeSchedule.findAll({
                 attributes: ['id', 'employee_id', 'day', 'start_time', 'end_time', 'start_break', 'end_break'],
                 where: {
-                    employee_id: employeeSchedule.id
+                    employee_id: employeeSchedule.employee_id
                 }
             });
         } else {
             response = await EmployeeSchedule.findAll({
                 attributes: ['id', 'employee_id', 'day', 'start_time', 'end_time', 'start_break', 'end_break'],
                 where: {
-                    [Op.and]: [{ employee_id: employeeSchedule.id }]
+                    [Op.and]: [{ employee_id: employeeSchedule.employee_id }]
                 }
             });
         }

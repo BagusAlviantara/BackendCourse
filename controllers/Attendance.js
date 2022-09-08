@@ -41,10 +41,10 @@ exports.createAttendance = async(req, res) => {
     const { id, status, student_id, schedule_id } = req.body;
     try {
         await Attendance.create({
-            id: id,
-            student_id: student_id,
-            schedule_id: schedule_id,
-            status: status,
+            id,
+            status,
+            student_id,
+            schedule_id
         });
         res.status(201).json({ msg: "Create Berhasil" });
     } catch (error) {
