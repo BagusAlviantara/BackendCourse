@@ -1,7 +1,7 @@
 const Employee = require("../models/EmployeeModel.js");
 // const Schedule = require("../models/ClassScheduleModel.js");
 const { Op } = require("sequelize");
-// const StudentCourse = require("../models/StudentCourseModel.js");
+// const EmployeeCourse = require("../models/EmployeeCourseModel.js");
 
 exports.getEmployee = async(req, res) => {
     try {
@@ -100,6 +100,28 @@ exports.updateEmployee = async(req, res) => {
     }
 }
 
+exports.updateEmployeeNama = async(req, res) => {
+    try {
+        const employee = await Employee.findOne({
+            where: {
+                user_id: req.params.id
+            }
+        });
+        if (!employee) return res.status(404).json({ msg: "Data tidak ditemukan" });
+        const { name_employee, phone } = req.body;
+        if (req.role === "Admin") {
+            await Employee.update({ name_employee, phone }, {
+                where: {
+                    user_id: employee.user_id
+                }
+            });
+        }
+        res.status(200).json({ msg: "Employee updated successfuly" });
+    } catch (error) {
+        res.status(500).json({ msg: error.message });
+    }
+}
+
 exports.deleteEmployee = async(req, res) => {
     try {
         const employee = await Employee.findOne({
@@ -117,6 +139,23 @@ exports.deleteEmployee = async(req, res) => {
             });
         }
         res.status(200).json({ msg: "Employee deleted successfuly" });
+    } catch (error) {
+        res.status(500).json({ msg: error.message });
+    }
+}
+
+exports.getEmployeeCount = async(req, res) => {
+    try {
+
+        await Employee.count({
+            col: "id",
+        }).then(function(count) {
+            res.status(200).json(count);
+        });
+        // const count = await Employee.count({
+        //     col: 'name',
+        // });
+        // res.status(200).json(count);
     } catch (error) {
         res.status(500).json({ msg: error.message });
     }

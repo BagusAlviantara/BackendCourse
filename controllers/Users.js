@@ -72,7 +72,7 @@ exports.createUser = async(req, res) => {
             phone: phone,
             email: email,
             password: hashPassword,
-            role: "Guest"
+            role: role
         });
         res.status(201).json({ msg: "Register Berhasil" });
     } catch (error) {
@@ -142,6 +142,30 @@ exports.updateUser = async(req, res) => {
         res.status(400).json({ msg: error.message });
     }
 }
+
+exports.updateUserName = async(req, res) => {
+    const user = await User.findOne({
+        where: {
+            id: req.params.id
+        }
+    });
+    if (!user) return res.status(404).json({ msg: "User tidak ditemukan" });
+    const { full_name, phone } = req.body;
+    try {
+        await User.update({
+            full_name: full_name,
+            phone: phone,
+        }, {
+            where: {
+                id: user.id
+            }
+        });
+        res.status(200).json({ msg: "User Updated" });
+    } catch (error) {
+        res.status(400).json({ msg: error.message });
+    }
+}
+
 
 exports.deleteUser = async(req, res) => {
     const user = await User.findOne({

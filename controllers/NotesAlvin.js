@@ -6,12 +6,12 @@ exports.getNotes = async(req, res) => {
         let response;
         if (req.role === "Admin") {
             response = await Notes.findAll({
-                attributes: ['id', 'student_id', 'employee_id', 'title', 'description'],
+                attributes: ['id', 'student_id', 'employee_id', 'title', 'description', 'role', 'created_at'],
                 where: { student_id: req.params.student_id }
             });
         } else {
             response = await Notes.findAll({
-                attributes: ['id', 'student_id', 'employee_id', 'title', 'description']
+                attributes: ['id', 'student_id', 'employee_id', 'title', 'description', 'role', 'created_at']
             });
         }
         res.status(200).json(response);
@@ -31,14 +31,14 @@ exports.getNotesByIdStudent = async(req, res) => {
         let response;
         if (req.role === "Admin") {
             response = await Notes.findAll({
-                attributes: ['id', 'student_id', 'employee_id', 'title', 'description'],
+                attributes: ['id', 'student_id', 'employee_id', 'title', 'description', 'role', 'created_at'],
                 where: {
                     student_id: notes.student_id
                 }
             });
         } else {
             response = await Notes.findAll({
-                attributes: ['id', 'student_id', 'employee_id', 'title', 'description'],
+                attributes: ['id', 'student_id', 'employee_id', 'title', 'description', 'role', 'created_at'],
                 where: {
                     [Op.and]: [{ student_id: notes.student_id }]
                 }
@@ -61,14 +61,14 @@ exports.getNotesById = async(req, res) => {
         let response;
         if (req.role === "Admin") {
             response = await Notes.findOne({
-                attributes: ['id', 'student_id', 'employee_id', 'title', 'description'],
+                attributes: ['id', 'student_id', 'employee_id', 'title', 'description', 'role', 'created_at'],
                 where: {
                     id: notes.id
                 }
             });
         } else {
             response = await Notes.findOne({
-                attributes: ['id', 'student_id', 'employee_id', 'title', 'description'],
+                attributes: ['id', 'student_id', 'employee_id', 'title', 'description', 'role', 'created_at'],
                 where: {
                     [Op.and]: [{ id: notes.id }]
                 }
@@ -86,7 +86,8 @@ exports.createNotes = async(req, res) => {
         student_id,
         employee_id,
         title,
-        description
+        description,
+        role
     } = req.body;
     try {
         await Notes.create({
@@ -94,7 +95,8 @@ exports.createNotes = async(req, res) => {
             student_id,
             employee_id,
             title,
-            description
+            description,
+            role
         });
         res.status(201).json({ msg: "student notes Created Successfuly" });
     } catch (error) {
@@ -115,7 +117,8 @@ exports.updateNotes = async(req, res) => {
             student_id,
             employee_id,
             title,
-            description
+            description,
+            role
         } = req.body;
         if (req.role === "Student") {
             await Notes.update({
@@ -123,7 +126,8 @@ exports.updateNotes = async(req, res) => {
                 student_id,
                 employee_id,
                 title,
-                description
+                description,
+                role
             }, {
                 where: {
                     id: notes.id
@@ -135,7 +139,8 @@ exports.updateNotes = async(req, res) => {
                 student_id,
                 employee_id,
                 title,
-                description
+                description,
+                role
             }, {
                 where: {
                     id: notes.id
@@ -161,7 +166,8 @@ exports.deleteNotes = async(req, res) => {
             student_id,
             employee_id,
             title,
-            description
+            description,
+            role
         } = req.body;
         if (req.role === "Admin") {
             await Notes.destroy({

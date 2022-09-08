@@ -74,6 +74,28 @@ exports.updateStudent = async(req, res) => {
     }
 }
 
+exports.updateStudentNama = async(req, res) => {
+    try {
+        const student = await Student.findOne({
+            where: {
+                user_id: req.params.id
+            }
+        });
+        if (!student) return res.status(404).json({ msg: "Data tidak ditemukan" });
+        const { name_student, phone } = req.body;
+
+        await Student.update({ name_student, phone }, {
+            where: {
+                user_id: student.user_id
+            }
+        });
+
+        res.status(200).json({ msg: "Employee updated successfuly" });
+    } catch (error) {
+        res.status(500).json({ msg: error.message });
+    }
+}
+
 exports.deleteStudent = async(req, res) => {
     const student = await Student.findOne({
         where: {
@@ -90,5 +112,22 @@ exports.deleteStudent = async(req, res) => {
         res.status(200).json({ msg: "Deleted" });
     } catch (error) {
         res.status(400).json({ msg: error.message });
+    }
+}
+
+exports.getStudentCount = async(req, res) => {
+    try {
+
+        await Student.count({
+            col: "id",
+        }).then(function(count) {
+            res.status(200).json(count);
+        });
+        // const count = await Student.count({
+        //     col: 'name',
+        // });
+        // res.status(200).json(count);
+    } catch (error) {
+        res.status(500).json({ msg: error.message });
     }
 }

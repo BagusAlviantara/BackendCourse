@@ -7,6 +7,7 @@ const {
     createUser,
     registerStudent,
     updateUser,
+    updateUserName,
     deleteUser
 } = require("../controllers/Users.js");
 const { verifyUser, adminOnly } = require("../middleware/AuthUser.js");
@@ -20,6 +21,7 @@ router.get('/users-employee', verifyUser, adminOnly, getUsersbyEmployee);
 router.post('/users', createUser);
 router.post('/register-student', registerStudent);
 router.patch('/users/:id', verifyUser, adminOnly, updateUser);
+router.patch('/users-edit/:id', verifyUser, adminOnly, updateUserName);
 router.delete('/users/:id', verifyUser, adminOnly, deleteUser);
 
 module.exports = router;

@@ -51,6 +51,13 @@ const Notes = db.define('notes', {
             notEmpty: true,
         }
     },
+    role: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            notEmpty: true
+        }
+    }
 }, {
     freezeTableName: true,
     timestamps: 'true',
