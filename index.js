@@ -15,7 +15,7 @@ const Schedule = require("./routes/ClassScheduleRoute.js");
 const Students = require("./routes/StudentRoute.js");
 const StudentCourse = require("./routes/StudentCourseRoute.js");
 const EmployeeSchedule = require("./routes/EmployeeScheduleRoute.js");
-
+//test
 const app = express();
 //const sessionStore = SequelizeStore(session.Store);
 //const router = express.Router();
