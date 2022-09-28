@@ -1,9 +1,7 @@
 const Product = require("../models/ProductModel.js");
 const { Op } = require("sequelize");
 const sequelize = require("sequelize");
-const db = require("../config/database.js");
-const { json } = require("body-parser");
-//const Products = require("../models/ProductModel.js");
+
 
 exports.getProducts = async(req, res) => {
     try {
@@ -21,9 +19,7 @@ exports.getProducts = async(req, res) => {
     } catch (error) {
         res.status(500).json({ msg: error.message });
     }
-
 }
-
 
 exports.getProductsByDistinct = async(req, res) => {
     try {
@@ -83,7 +79,7 @@ exports.getProductByCategories = async(req, res) => {
     try {
         const product = await Product.findOne({
             where: {
-                id: req.params.id
+                category_id: req.query.category_id
             }
         });
         if (!product) return res.status(404).json({ msg: "Data tidak ditemukan" });
@@ -134,19 +130,19 @@ exports.createProduct = async(req, res) => {
     }
 }
 
-//Percobaan menggunakan concat
-exports.concatProduct = async(req, res) => {
-    const filters = req.query;
-    const filteredProduct = response.filter(product => {
-        let isValid = true;
-        for (response in filters) {
-            console.log(response, product[response], filters[response]);
-            isValid = isValid && user[response] == filters[response];
-        }
-        return isValid;
-    });
-    res.send(filteredProduct);
-}
+// //Percobaan menggunakan concat
+// exports.concatProduct = async(req, res) => {
+//     const filters = req.query;
+//     const filteredProduct = response.filter(product => {
+//         let isValid = true;
+//         for (response in filters) {
+//             console.log(response, product[response], filters[response]);
+//             isValid = isValid && user[response] == filters[response];
+//         }
+//         return isValid;
+//     });
+//     res.send(filteredProduct);
+// }
 
 exports.getProductCount = async(req, res) => {
     try {
@@ -165,6 +161,22 @@ exports.getProductCount = async(req, res) => {
     }
 }
 
+exports.getProductCountbyAge = async(req, res) => {
+    try {
+
+        await Product.count({
+            col: "Age",
+        }).then(function(count) {
+            res.status(200).json(count);
+        });
+        // const count = await Product.count({
+        //     col: 'name',
+        // });
+        // res.status(200).json(count);
+    } catch (error) {
+        res.status(500).json({ msg: error.message });
+    }
+}
 
 exports.updateProduct = async(req, res) => {
     try {

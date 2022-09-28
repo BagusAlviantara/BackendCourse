@@ -3,7 +3,7 @@ const argon2 = require("argon2");
 
 exports.getReport = async(req, res) => {
     try {
-        const response = await Report.findOne({
+        const response = await Report.findAll({
             attributes: ['id', 'unit_id', 'student_id', 'schedule_id', 'score', 'photo', 'video']
         });
         res.status(200).json(response);
@@ -27,7 +27,7 @@ exports.getReportById = async(req, res) => {
 }
 
 exports.createReport = async(req, res) => {
-    const { id, unit_id, student_id, schedule_id, description, score, photo, video } = req.body;
+    const { id, unit_id, student_id, schedule_id, score, photo, video } = req.body;
     try {
         await Report.create({
             id: id,

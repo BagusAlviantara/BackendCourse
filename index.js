@@ -14,7 +14,7 @@ const Students = require("./routes/StudentRoute.js");
 const StudentCourse = require("./routes/StudentCourseRoute.js");
 const EmployeeSchedule = require("./routes/EmployeeScheduleRoute.js");
 const Attendance = require("./routes/AttendanceRoute.js");
-const Notes = require("./routes/NotesAlvinRoute.js");
+const Notes = require("./routes/NotesRoute.js");
 
 //test
 const app = express();

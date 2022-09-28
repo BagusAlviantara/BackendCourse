@@ -6,7 +6,7 @@ const {
     createNotes,
     updateNotes,
     deleteNotes
-} = require("../controllers/NotesAlvin.js");
+} = require("../controllers/Notes.js");
 const { verifyUser } = require("../middleware/AuthUser.js");
 
 const router = express.Router();

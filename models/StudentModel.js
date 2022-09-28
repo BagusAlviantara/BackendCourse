@@ -1,6 +1,5 @@
 const { Sequelize } = require("sequelize");
 const db = require("../config/database.js");
-const ClassSchedule = require("./ClassScheduleModel.js");
 const User = require("./UserModel.js");
 
 const { DataTypes } = Sequelize;
@@ -29,7 +28,7 @@ const Students = db.define('students', {
             notEmpty: true
         }
     },
-    phone_parent: {
+    phone: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {

@@ -1,20 +1,25 @@
 const Employee = require("../models/EmployeeModel.js");
-// const Schedule = require("../models/ClassScheduleModel.js");
+const Department = require("../models/DepartmentModel.js");
 const { Op } = require("sequelize");
-// const EmployeeCourse = require("../models/EmployeeCourseModel.js");
 
 exports.getEmployee = async(req, res) => {
     try {
         let response;
         if (req.role === "Admin") {
             response = await Employee.findAll({
-                attributes: ['id', 'user_id', 'name_employee', 'address', 'gender', 'phone', 'department_id']
+                attributes: ['id', 'user_id', 'name_employee', 'address', 'gender', 'phone', 'department_id'],
+                include: [
+                    { model: Department }
+                ]
+
             });
         } else if (req.role = "Employee") {
             response = await Employee.findAll({
-                attributes: ['id', 'user_id', 'name_employee', 'address', 'gender', 'phone', 'department_id']
+                attributes: ['id', 'user_id', 'name_employee', 'address', 'gender', 'phone', 'department_id'],
+                include: [
+                    { model: Department }
+                ]
             });
-            z
         }
         res.status(200).json(response);
     } catch (error) {

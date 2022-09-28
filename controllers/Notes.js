@@ -1,89 +1,183 @@
-const Note = require("../models/NoteModel.js");
-const argon2 = require("argon2");
+const Notes = require("../models/NotesModel.js");
+const { Op } = require("sequelize");
 
 exports.getNotes = async(req, res) => {
     try {
-        const response = await Note.findOne({
-            attributes: ['id', 'schedule_id', 'title', 'description', 'reciever_id', 'author_id']
-        });
+        let response;
+        if (req.role === "Admin") {
+            response = await Notes.findAll({
+                attributes: ['id', 'student_id', 'employee_id', 'title', 'description', 'role', 'created_at'],
+
+            });
+        } else {
+            response = await Notes.findAll({
+                attributes: ['id', 'student_id', 'employee_id', 'title', 'description', 'role', 'created_at']
+            });
+        }
         res.status(200).json(response);
     } catch (error) {
         res.status(500).json({ msg: error.message });
     }
 }
 
-exports.getNoteById = async(req, res) => {
+exports.getNotesByIdStudent = async(req, res) => {
     try {
-        const response = await Note.findOne({
-            attributes: ['id', 'schedule_id', 'title', 'description', 'reciever_id', 'author_id'],
+        const notes = await Notes.findOne({
+            where: {
+                student_id: req.params.student_id
+            }
+        });
+        if (!notes) return res.status(404).json({ msg: "Data tidak ditemukan" });
+        let response;
+        if (req.role === "Admin") {
+            response = await Notes.findAll({
+                attributes: ['id', 'student_id', 'employee_id', 'title', 'description', 'role', 'created_at'],
+                where: {
+                    student_id: notes.student_id
+                }
+            });
+        } else {
+            response = await Notes.findAll({
+                attributes: ['id', 'student_id', 'employee_id', 'title', 'description', 'role', 'created_at'],
+                where: {
+                    [Op.and]: [{ student_id: notes.student_id }]
+                }
+            });
+        }
+        res.status(200).json(response);
+    } catch (error) {
+        res.status(500).json({ msg: error.message });
+    }
+}
+
+exports.getNotesById = async(req, res) => {
+    try {
+        const notes = await Notes.findOne({
             where: {
                 id: req.params.id
             }
         });
+        if (!notes) return res.status(404).json({ msg: "Data tidak ditemukan" });
+        let response;
+        if (req.role === "Admin") {
+            response = await Notes.findOne({
+                attributes: ['id', 'student_id', 'employee_id', 'title', 'description', 'role', 'created_at'],
+                where: {
+                    id: notes.id
+                }
+            });
+        } else {
+            response = await Notes.findOne({
+                attributes: ['id', 'student_id', 'employee_id', 'title', 'description', 'role', 'created_at'],
+                where: {
+                    [Op.and]: [{ id: notes.id }]
+                }
+            });
+        }
         res.status(200).json(response);
     } catch (error) {
         res.status(500).json({ msg: error.message });
     }
 }
 
-exports.createNote = async(req, res) => {
-    const {id, schedule_id, title, description, reciever_id, author_id} = req.body;
+exports.createNotes = async(req, res) => {
+    const {
+        id,
+        student_id,
+        employee_id,
+        title,
+        description,
+        role
+    } = req.body;
     try {
-        await Note.create({
-            id: id,
-            schedule_id: schedule_id,
-            title: title,
-            description: description,
-            reciever_id: reciever_id,
-            author_id: author_id
+        await Notes.create({
+            id,
+            student_id,
+            employee_id,
+            title,
+            description,
+            role
         });
-        res.status(201).json({ msg: "Create Berhasil" });
+        res.status(201).json({ msg: "Notes Created Successfuly" });
     } catch (error) {
-        res.status(400).json({ msg: error.message });
+        res.status(500).json({ msg: error.message });
     }
 }
 
-exports.updateNote = async(req, res) => {
-    const note = await Note.findOne({
-        where: {
-            id: req.params.id
-        }
-    });
-    if (!note) return res.status(404).json({ msg: "Note tidak ditemukan" });
-    const { schedule_id, title, description, reciever_id, author_id } = req.body;
+exports.updateNotes = async(req, res) => {
     try {
-        await Note.update({
-            schedule_id: schedule_id,
-            title: title,
-            description: description,
-            reciever_id: reciever_id,
-            author_id: author_id
-        }, {
+        const notes = await Notes.findOne({
             where: {
-                id: note.id
+                id: req.params.id
             }
         });
-        res.status(200).json({ msg: "Note Updated" });
+        if (!notes) return res.status(404).json({ msg: "Data tidak ditemukan" });
+        const {
+            id,
+            student_id,
+            employee_id,
+            title,
+            description,
+            role
+        } = req.body;
+        if (req.role === "Student") {
+            await Notes.update({
+                id,
+                student_id,
+                employee_id,
+                title,
+                description,
+                role
+            }, {
+                where: {
+                    id: notes.id
+                }
+            });
+        } else {
+            await Notes.update({
+                id,
+                student_id,
+                employee_id,
+                title,
+                description,
+                role
+            }, {
+                where: {
+                    id: notes.id
+                }
+            });
+        }
+        res.status(200).json({ msg: "Notes updated successfuly" });
     } catch (error) {
-        res.status(400).json({ msg: error.message });
+        res.status(500).json({ msg: error.message });
     }
 }
 
-exports.deleteNote = async(req, res) => {
-    const note = await Note.findOne({
-        where: {
-            id: req.params.id
-        }
-    });
-    if (!note) return res.status(404).json({ msg: "Note tidak ditemukan" });
+exports.deleteNotes = async(req, res) => {
     try {
-        await Note.destroy({
+        const notes = await Notes.findOne({
             where: {
-                id: note.id
+                id: req.params.id
             }
         });
-        res.status(200).json({ msg: "Note Deleted" });
+        if (!notes) return res.status(404).json({ msg: "Data tidak ditemukan" });
+        const {
+            id,
+            student_id,
+            employee_id,
+            title,
+            description,
+            role
+        } = req.body;
+        if (req.role === "Admin") {
+            await Notes.destroy({
+                where: {
+                    id: notes.id
+                }
+            });
+        }
+        res.status(200).json({ msg: "Notes deleted successfuly" });
     } catch (error) {
-        res.status(400).json({ msg: error.message });
+        res.status(500).json({ msg: error.message });
     }
 }
